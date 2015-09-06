@@ -3,4 +3,4 @@
     This is the home page for the
   <a href="http://railstutorial.jp/">Ruby on Rails Tutorial</a>
     sample application.
-</p>
+</p><h1>Sample App</h1>
