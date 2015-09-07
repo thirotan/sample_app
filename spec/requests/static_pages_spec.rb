@@ -12,7 +12,7 @@ RSpec.describe "StaticPages", type: :request do
     end
   end
 
-  describe "GET /static_pages/helpe" do
+  describe "GET /static_pages/help" do
     it "should have the content 'Help'" do 
       visit '/static_pages/help'
       expect(page).to have_content('Help')
