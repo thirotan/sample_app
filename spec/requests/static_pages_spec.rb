@@ -22,4 +22,11 @@ RSpec.describe "StaticPages", type: :request do
       expect(response).to have_http_status(200)
     end
   end
+
+  describe "GET /static_pages/about" do
+    it "should have the content 'About Us'" do
+      visit '/static_pages/about'
+      expect(page).to have_content('About Us')
+    end
+  end
 end
