@@ -13,6 +13,8 @@ RSpec.describe User, type: :model do
   it { expect(@user).to respond_to(:password_digest) }
   it { expect(@user).to respond_to(:password) }
   it { expect(@user).to respond_to(:password_confirmation) }
+  it { is_expected.to respond_to(:remember_token) }
+  it { is_expected.to respond_to(:authenticate) }
 #  どっちでも通る is_expectedはexpect(subject)として定義されてる
 #  it { is_expected.to respond_to(:name) }
 #  it { is_expected.to respond_to(:email) }
@@ -27,6 +29,11 @@ RSpec.describe User, type: :model do
   describe "when name is too long" do
     before { @user.name = "a" * 51 }
     it { is_expected.not_to be_valid }
+  end
+
+  describe "remember tokenn" do
+    before { @user.save }
+    it { expect(@user.remember_token).not_to be_blank }
   end
 
   describe "when email format is invalid" do
