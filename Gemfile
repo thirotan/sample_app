@@ -28,6 +28,9 @@ group :test do
   gem 'selenium-webdriver'
   gem 'capybara'
   gem 'factory_girl_rails'
+
+  gem 'cucumber-rails'
+  gem 'database_cleaner', github: 'bmabey/database_cleaner'
 end
 
 group :production do

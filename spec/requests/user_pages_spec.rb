@@ -45,6 +45,7 @@ RSpec.describe "UserPages", type: :request do
         before { click_button submit }
         let(:user) { User.find_by(email: 'user@example.com') }
 
+        it { is_expected.to have_link('Sign out') }
         it { is_expected.to have_title(user.name) }
         it { is_expected.to have_selector('div.alert.alert-success', text: 'Welcome') }
       end

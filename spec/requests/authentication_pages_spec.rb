@@ -10,6 +10,7 @@ RSpec.describe "AuthenticationPages", type: :request do
 
       it { is_expected.to have_title('Sign in') }
       it { is_expected.to have_selector('div.alert.alert-danger', text: 'Invalid') }
+      it { is_expected.to have_error_message('Invalid') }
 
       describe "after visiting another page" do
         before { click_link "Home" }
@@ -18,11 +19,11 @@ RSpec.describe "AuthenticationPages", type: :request do
     end
 
     describe "with volid information" do
-      let(:user) { FactoryGurk.create(:user) }
+      let(:user) { FactoryGirl.create(:user) }
 
       before do
         fill_in "Email",   with: user.email.upcase
-        fill_in "password", with: user.password
+        fill_in "Password", with: user.password
         click_button "Sign in"
       end
 
@@ -30,6 +31,11 @@ RSpec.describe "AuthenticationPages", type: :request do
       it { is_expected.to have_link('Profile', href: user_path(user)) }
       it { is_expected.to have_link('Sign out', href: signout_path) }
       it { is_expected.not_to have_link('Sign in', href: signin_path) }
+     
+      describe "Followed by signout" do
+        before { click_link "Sign out" }
+        it { is_expected.to have_link('Sign in') }
+      end
     end
   end
 end
