@@ -9,7 +9,7 @@ RSpec.describe "AuthenticationPages", type: :request do
       before { click_button "Sign in" }
 
       it { is_expected.to have_title('Sign in') }
-      it { is_expected.to have_selector('div.alert.alert-danger', text: 'Invalid') }
+      #it { is_expected.to have_selector('div.alert.alert-danger', text: 'Invalid') }
       it { is_expected.to have_error_message('Invalid') }
 
       describe "after visiting another page" do
