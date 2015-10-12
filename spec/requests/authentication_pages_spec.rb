@@ -60,6 +60,15 @@ RSpec.describe "AuthenticationPages", type: :request do
           it { is_expected.to have_title('Sign in') }
         end
       end
+
+      describe "not exsists link" do
+        before { visit root_path }
+
+        it {  is_expected.not_to have_link('Profile',  href: user_path(user)) }
+        it {  is_expected.not_to have_link('Settings', href: edit_user_path(user)) } 
+        it {  is_expected.not_to have_link('Sign out', href: signout_path) }
+        it {  is_expected.to have_link('Sign in',      href: signin_path ) }
+      end
     end    
 
     describe "as wrong user" do
@@ -87,6 +96,17 @@ RSpec.describe "AuthenticationPages", type: :request do
 
       describe "submitting a DELETE request to the Users#destroy action" do
         before { delete user_path(user) }
+        specify { expect(response).to redirect_to(root_path) }
+      end
+    end
+
+    describe "as admin user" do
+      let(:admin) { FactoryGirl.create(:admin) }
+
+      before{ sign_in admin, no_capybara: true }
+
+      describe "submitting a DELETE request to the Users#destroy action" do
+        before { delete user_path(admin) }
         specify { expect(response).to redirect_to(root_path) }
       end
     end
