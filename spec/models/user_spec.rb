@@ -19,6 +19,8 @@ RSpec.describe User, type: :model do
   it { is_expected.to respond_to(:remember_token) }
   it { is_expected.to respond_to(:authenticate) }
   it { is_expected.to respond_to(:admin) }
+  it { is_expected.to respond_to(:microposts) }
+  it { is_expected.to respond_to(:feed) }
 
   it { is_expected.to be_valid }  
   it { is_expected.not_to be_admin } 
@@ -118,6 +120,36 @@ RSpec.describe User, type: :model do
 
       it { is_expected.not_to eq user_for_invalid_password }
       specify { expect(user_for_invalid_password).to be_falsy }
+    end
+  end
+
+  describe "micropost associations" do
+
+    before { @user.save }
+    let!(:older_micropost) do
+      FactoryGirl.create(:micropost, user: @user, created_at: 1.day.ago)
+    end
+    let!(:newer_micropost) do
+      FactoryGirl.create(:micropost, user: @user, created_at: 1.hour.ago)
+    end
+
+    it "should dstroy associated microposts" do
+      microposts = @user.microposts.to_a
+      @user.destroy
+      expect(microposts).not_to be_empty
+      microposts.each do |micropost|
+        expect(Micropost.where(id: micropost.id)).to be_empty
+      end
+    end
+
+    describe "status" do
+      let(:unfollowed_post) do
+        FactoryGirl.create(:micropost, user: FactoryGirl.create(:user))
+      end
+
+      its(:feed) { is_expected.to include(newer_micropost) }
+      its(:feed) { is_expected.to include(older_micropost) }
+      its(:feed) { is_expected.not_to include(unfollowed_post) }
     end
   end
 end
